@@ -29,7 +29,7 @@ plotPositionsMA <- function(data_plot, # dataset (xts) with calculations
     select(Time, col_price, col_pos,
            col_ma) %>% 
     mutate(Time = ymd_hms(Time),
-	       next_Time = dplyr::lead(Time)) %>% 
+	       prev_Time = dplyr::lag(Time)) %>% 
     rename("position" = col_pos)
   
   pos_cols <- c("-1" = "red", 
@@ -37,8 +37,8 @@ plotPositionsMA <- function(data_plot, # dataset (xts) with calculations
                 "1" = "green")
   
   p1 <- ggplot(data_plot_) + 
-    geom_rect(aes(xmin = Time,
-                  xmax = next_Time, 
+    geom_rect(aes(xmin = prev_Time,
+                  xmax = Time, 
                   ymin = -Inf, 
                   ymax = Inf, 
                   fill = factor(position)),
@@ -115,8 +115,8 @@ plotPositions2MAs <- function(data_plot, # dataset (xts) with calculations
                 "1" = "green")
   
   p1 <- ggplot(data_plot_) + 
-    geom_rect(aes(xmin = Time,
-                  xmax = dplyr::lead(Time), 
+    geom_rect(aes(xmin = dplyr::lag(Time), 
+                  xmax = Time,
                   ymin = -Inf, 
                   ymax = Inf, 
                   fill = factor(position)),
@@ -195,8 +195,8 @@ plotPositionsVB <- function(data_plot,  # dataset (xts) with calculations
                 "1" = "green")
   
   p1 <- ggplot(data_plot_) + 
-    geom_rect(aes(xmin = Time,
-                  xmax = dplyr::lead(Time), 
+    geom_rect(aes(xmin = dplyr::lag(Time), 
+                  xmax = Time,
                   ymin = -Inf, 
                   ymax = Inf, 
                   fill = factor(position)),
